@@ -1,7 +1,18 @@
+:root {
+    --black: #09090b;
+    --size-20: 1.25rem;
+    --size-8: 0.5rem;
+    --size-80: 5rem;
+    --bg-gradient: linear-gradient(180deg,
+            rgba(0, 0, 0, 0.6) 0%,
+            rgba(0, 0, 0, 0.3) 100%)
+}
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 html,
@@ -152,7 +163,7 @@ img {
 }
 
 .cover-img img {
-    /* filter: saturate(0); */
+    filter: saturate(0);
 }
 
 .site-info {
@@ -228,3 +239,112 @@ img {
 .line p {
     transform: translateY(100%);
 }
+
+
+
+/* Horizontal Scroll starts*/
+.space {
+    height: 0vh;
+    background: var(--black);
+}
+
+.section-shared {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    padding: clamp(var(--size-20), var(--size-8) + 2.2vw, var(--size-80));
+    overflow: hidden;
+    background: var(--black);
+}
+
+.container {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.25rem, 0.5rem + 1.6vw, 1.5rem);
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* h1,
+h2 {
+    color: white;
+} */
+
+/* Horizontal Scroll Ends*/
+
+
+/* GreenSock horizontal scroll start */
+.first {
+    .bg {
+        background-image: var(--bg-gradient),
+            url(https://images.unsplash.com/photo-1617478755490-e21232a5eeaf?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU1NjM5NA&ixlib=rb-1.2.1&q=75&w=1920);
+    }
+}
+
+.second {
+    .bg {
+        background-image: var(--bg-gradient),
+            url("https://images.unsplash.com/photo-1617128734662-66da6c1d3505?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzc3NTM3MA&ixlib=rb-1.2.1&q=75&w=1920");
+    }
+}
+
+.third {
+    .bg {
+        background-image: var(--bg-gradient),
+            url(https://images.unsplash.com/photo-1617438817509-70e91ad264a5?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU2MDk4Mg&ixlib=rb-1.2.1&q=75&w=1920);
+    }
+}
+
+.fourth {
+    .bg {
+        background-image: var(--bg-gradient),
+            url(https://images.unsplash.com/photo-1617412327653-c29093585207?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzU2MDgzMQ&ixlib=rb-1.2.1&q=75&w=1920);
+    }
+}
+
+.fifth {
+    .bg {
+        background-image: var(--bg-gradient),
+            url("https://images.unsplash.com/photo-1617141636403-f511e2d5dc17?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxODAzMjc4Mw&ixlib=rb-1.2.1&q=75w=1920");
+        background-position: 50% 45%;
+    }
+}
+
+.scroll-section {
+    width: 100%;
+    height: 100%;
+}
+
+.scroll-section .outer {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.scroll-section .inner {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.scroll-section .outer .inner .bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    /* top: 0; */
+    background-size: cover;
+    background-position: center;
+}
+
+
+
+/* GreenSock horizontal scroll end */
