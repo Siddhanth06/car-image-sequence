@@ -30,7 +30,7 @@
 
     const frames = {
       currentIndex: 0,
-      maxIndex: 50,
+      maxIndex: 180,
     };
 
     let imagesLoaded = 0;
@@ -38,7 +38,7 @@
 
     function preLoadImages() {
       for (var i = 1; i <= frames.maxIndex; i++) {
-        const imageUrl = `./cars/ezgif-frame-${i
+        const imageUrl = `./tiffin/ezgif-frame-${i
           .toString()
           .padStart(3, '0')}.png`;
         const img = new Image();
