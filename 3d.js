@@ -45,13 +45,12 @@ loader.load(
     scene.add(model);
     model.position.set(0, 0, 0);
     model.scale.set(2.1, 2.1, 2.1);
-    model.rotation.y = -1;
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: ".section_one",
         markers: true,
-        scrub: true,
+        scrub: 1,
         start: "top top", // Starts when the top of section_one reaches the top of the viewport
         end: "bottom bottom", // Ends when the bottom of section_one reaches the top of the viewport
       },
@@ -60,23 +59,93 @@ loader.load(
     tl.to(
       camera.position,
       {
-        x: 1,
-        y: 1,
-        z: -0.6,
-        duration: 5,
+        x: 0.02,
+        y: 0.803,
+        z: 0.54,
+        duration: 10,
       },
       "one"
-    );
-    // .to(
-    //   camera.position,
-    //   {
-    //     x: -1.5,
-    //     y: 2,
-    //     z: 3.76,
-    //     duration: 5,
-    //   },
-    //   "two"
-    // );
+    )
+      .to(
+        camera.rotation,
+        {
+          x: 0.242,
+          y: 3.142,
+          z: -0.02,
+          duration: 10,
+        },
+        "one"
+      )
+      .to(
+        camera.position,
+        {
+          x: -0.02,
+          y: 0.451,
+          z: 0.473,
+          duration: 10,
+        },
+        "two"
+      )
+      .to(
+        camera.rotation,
+        {
+          x: 0,
+          y: 3.2,
+          z: -0.034,
+          duration: 10,
+        },
+        "two"
+      )
+      .to(camera.position, {
+        z: 0.4,
+        duration: 10,
+      })
+      .to(
+        camera.position,
+        {
+          x: 0.011,
+          y: 0.297,
+          z: 0.517,
+          duration: 10,
+        },
+        "three"
+      )
+      .to(
+        camera.rotation,
+        {
+          x: 0,
+          y: 3.142,
+          z: 0.01,
+          duration: 10,
+        },
+        "three"
+      )
+      .to(camera.position, {
+        z: 0.5,
+        duration: 10,
+      })
+      .to(
+        camera.position,
+        {
+          x: -0.45,
+          y: 0.7,
+          z: 0.65,
+          duration: 20,
+        },
+        "four"
+      )
+      .to(
+        camera.rotation,
+        {
+          x: 0,
+          y: 3.2,
+          z: 0,
+          duration: 20,
+        },
+        "four"
+      );
+    // camera.position.set(0.1, 0.8, 0.3);
+    // camera.rotation.set(0, 3.2, 0);
 
     // On button click
     // document.getElementById("moveCameraButton").addEventListener("click", () => {
@@ -102,31 +171,37 @@ loader.load(
 );
 
 // Set Camera Position
-camera.position.set(0, 2, 5);
-// camera.position.set(1, 1, -0.6);
-camera.rotation.set(0, 0, 0);
-if (model) {
-  camera.lookAt(model);
-}
-const cameraHelper = new THREE.CameraHelper(camera);
-scene.add(cameraHelper);
 
-// Add a ground plane to catch shadows
-const groundGeometry = new THREE.PlaneGeometry(10, 10);
-const groundMaterial = new THREE.ShadowMaterial({ opacity: 0.5 }); // Shadow effect
-const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-ground.rotation.x = -Math.PI / 2; // Lay flat
-ground.position.set(0, 0, 0); // Adjust to be slightly below the car
-ground.receiveShadow = true;
-scene.add(ground);
+//Base Camera
+camera.position.set(5, 1.5, 2);
+camera.rotation.set(0, 1.2, 0);
+
+//first animation
+// camera.position.set(0.02, 0.85, 0.54);
+// camera.rotation.set(0.4, 3.2, -0.02);
+
+// camera.position.set(0.02, 0.803, 0.54);
+// camera.rotation.set(0.242, 3.142, -0.02);
+
+//second animation
+// camera.position.set(-0.02, 0.42, 0.5);
+// camera.rotation.set(0, 3.2, 0.01);
+
+// camera.position.set(-0.02, 0.451, 0.473);
+// camera.rotation.set(0, 3.2, -0.034);
+
+//third animation
+// camera.position.set(0.011, 0.297, 0.517);
+// camera.rotation.set(0, 3.142, 0.01);
+
+//fourth aniamtion
+// camera.position.set(-0.45, 0.7, 0.65);
+// camera.rotation.set(0, 3.2, 0);
 
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
-  if (model) {
-    camera.lookAt(model.position); // Ensure camera is always looking at the model
-  }
-  controls.update(); // Required for damping effect
+  // controls.update(); // Required for damping effect
   renderer.render(scene, camera);
 }
 animate();
@@ -155,40 +230,17 @@ ambientLight.color = new THREE.Color("white");
 ambientLight.intensity = 0.4;
 scene.add(ambientLight);
 
-// Import dat.GUI (Make sure to include it in your project)
+// Gui Helpers
 const gui = new dat.GUI();
-
-// GUI Controls
-const lightFolder = gui.addFolder("Directional Light");
-lightFolder.add(directionalLight.position, "x", -10, 10).name("Position X");
-lightFolder.add(directionalLight.position, "y", -10, 10).name("Position Y");
-lightFolder.add(directionalLight.position, "z", -10, 10).name("Position Z");
-lightFolder.add(directionalLight.rotation, "x", -10, 10).name("Rotation X");
-lightFolder.add(directionalLight.rotation, "y", -10, 10).name("Rotation Y");
-lightFolder.add(directionalLight.rotation, "z", -10, 10).name("Rotation Z");
-
-lightFolder.add(directionalLight, "intensity", 0, 5).name("Intensity");
-lightFolder
-  .addColor({ color: "#ffffff" }, "color")
-  .name("Color")
-  .onChange((value) => {
-    directionalLight.color.set(value);
-  });
-
-lightFolder.open(); // Keep GUI open by default
-
 const cameraFolder = gui.addFolder("Camera Controls");
-
 // Control Camera Position
-cameraFolder.add(camera.position, "x", -10, 10).name("Position X");
-cameraFolder.add(camera.position, "y", -10, 10).name("Position Y");
-cameraFolder.add(camera.position, "z", -10, 10).name("Position Z");
-
+cameraFolder.add(camera.position, "x", -1, 1).name("Position X").step(0.001);
+cameraFolder.add(camera.position, "y", -1, 1).name("Position Y").step(0.001);
+cameraFolder.add(camera.position, "z", -1, 1).name("Position Z").step(0.001);
 // Control Camera Rotation
-cameraFolder.add(camera.rotation, "x", -Math.PI, Math.PI).name("Rotation X");
-cameraFolder.add(camera.rotation, "y", -Math.PI, Math.PI).name("Rotation Y");
-cameraFolder.add(camera.rotation, "z", -Math.PI, Math.PI).name("Rotation Z");
-
+cameraFolder.add(camera.rotation, "x", -Math.PI, Math.PI).name("Rotation X").step(0.001);
+cameraFolder.add(camera.rotation, "y", -Math.PI, Math.PI).name("Rotation Y").step(0.001);
+cameraFolder.add(camera.rotation, "z", -Math.PI, Math.PI).name("Rotation Z").step(0.001);
 // Control Camera Field of View (FOV)
 cameraFolder
   .add(camera, "fov", 1, 120)
@@ -196,5 +248,4 @@ cameraFolder
   .onChange(() => {
     camera.updateProjectionMatrix(); // Update camera after changing FOV
   });
-
 cameraFolder.open(); // Open the Camera Controls by default
