@@ -47,12 +47,15 @@ loader.load(
     model.scale.set(2.1, 2.1, 2.1);
 
     const tl = gsap.timeline({
+      // repeat: -1,
+      // yoyo: true,
       scrollTrigger: {
-        trigger: ".section_one",
+        trigger: "#canvas-container",
         markers: true,
-        scrub: 1,
-        start: "top top", // Starts when the top of section_one reaches the top of the viewport
-        end: "bottom bottom", // Ends when the bottom of section_one reaches the top of the viewport
+        scrub: 2,
+        pin: true,
+        start: "1% top", // Starts when the top of section_one reaches the top of the viewport
+        end: "+=4000px 95%", // Ends when the bottom of section_one reaches the top of the viewport
       },
     });
 
@@ -62,7 +65,8 @@ loader.load(
         x: 0.02,
         y: 0.803,
         z: 0.54,
-        duration: 10,
+        // delay: 3,
+        // duration: 1.5,
       },
       "one"
     )
@@ -72,17 +76,21 @@ loader.load(
           x: 0.242,
           y: 3.142,
           z: -0.02,
-          duration: 10,
+          // delay: 3,
+          // duration: 1,
         },
         "one"
       )
+      .fromTo(".overlay", { opacity: 0 }, { opacity: 1 }, "one")
+      .to(".card1", { opacity: 1 })
       .to(
         camera.position,
         {
           x: -0.02,
           y: 0.451,
           z: 0.473,
-          duration: 10,
+          // delay: 3,
+          // duration: 1,
         },
         "two"
       )
@@ -92,21 +100,31 @@ loader.load(
           x: 0,
           y: 3.2,
           z: -0.034,
-          duration: 10,
+          // delay: 3,
+          // duration: 1,
         },
         "two"
       )
-      .to(camera.position, {
-        z: 0.4,
-        duration: 10,
-      })
+      .to(".card1", { opacity: 0 }, "two")
+      .to(".card2", { opacity: 1 })
+      .to(
+        camera.position,
+        {
+          z: 0.4,
+          // delay: 3,
+          // duration: 1,
+        },
+        "a"
+      )
+      .to(".card2", { opacity: 0 }, "a")
       .to(
         camera.position,
         {
           x: 0.011,
           y: 0.297,
           z: 0.517,
-          duration: 10,
+          // delay: 3,
+          // duration: 1,
         },
         "three"
       )
@@ -116,13 +134,16 @@ loader.load(
           x: 0,
           y: 3.142,
           z: 0.01,
-          duration: 10,
+          // delay: 3,
+          // duration: 1,
         },
         "three"
       )
+      .to(".card3", { opacity: 1 })
       .to(camera.position, {
         z: 0.5,
-        duration: 10,
+        // delay: 3,
+        // duration: 1,
       })
       .to(
         camera.position,
@@ -130,7 +151,8 @@ loader.load(
           x: -0.45,
           y: 0.7,
           z: 0.65,
-          duration: 20,
+          // delay: 3,
+          // duration: 1,
         },
         "four"
       )
@@ -140,27 +162,37 @@ loader.load(
           x: 0,
           y: 3.2,
           z: 0,
-          duration: 20,
+          // delay: 3,
+          // duration: 1,
         },
         "four"
-      );
-    // camera.position.set(0.1, 0.8, 0.3);
-    // camera.rotation.set(0, 3.2, 0);
-
-    // On button click
-    // document.getElementById("moveCameraButton").addEventListener("click", () => {
-    //   gsap.to(camera.position, {
-    //     x: 1,
-    //     y: 1,
-    //     z: -0.6,
-    //     duration: 2,
-    //     ease: "power2.inOut",
-    //   });
-
-    //   gsap.to(camera.rotation, {
-    //     onUpdate: () => camera.lookAt(model.position),
-    //   });
-    // });
+      )
+      .to(".card3", { opacity: 0 }, "four")
+      .to(".card4", { opacity: 1 })
+      .to(
+        camera.position,
+        {
+          x: -0.033,
+          y: 1.243,
+          z: -0.781,
+          // delay: 3,
+          // duration: 1,
+        },
+        "five"
+      )
+      .to(
+        camera.rotation,
+        {
+          x: -0.933,
+          y: -0.034,
+          z: 0,
+          // delay: 3,
+          // duration: 1,
+        },
+        "five"
+      )
+      .to(".card4", { opacity: 0 }, "five")
+      .to(".card5", { opacity: 1 });
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -198,6 +230,10 @@ camera.rotation.set(0, 1.2, 0);
 // camera.position.set(-0.45, 0.7, 0.65);
 // camera.rotation.set(0, 3.2, 0);
 
+//fifth aniamtion
+// camera.position.set(-0.033, 1.243, -0.781);
+// camera.rotation.set(-0.933, -0.034, 0);
+
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
@@ -221,7 +257,7 @@ const directionalLight = new THREE.DirectionalLight("white", 1);
 directionalLight.position.set(5, 2, 0);
 scene.add(directionalLight);
 const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.5);
-scene.add(directionalLightHelper);
+// scene.add(directionalLightHelper);
 const axesHelper = new THREE.AxesHelper(1); // Size 1
 directionalLight.add(axesHelper); // Attach AxesHelper to the light
 
@@ -231,21 +267,21 @@ ambientLight.intensity = 0.4;
 scene.add(ambientLight);
 
 // Gui Helpers
-const gui = new dat.GUI();
-const cameraFolder = gui.addFolder("Camera Controls");
-// Control Camera Position
-cameraFolder.add(camera.position, "x", -1, 1).name("Position X").step(0.001);
-cameraFolder.add(camera.position, "y", -1, 1).name("Position Y").step(0.001);
-cameraFolder.add(camera.position, "z", -1, 1).name("Position Z").step(0.001);
-// Control Camera Rotation
-cameraFolder.add(camera.rotation, "x", -Math.PI, Math.PI).name("Rotation X").step(0.001);
-cameraFolder.add(camera.rotation, "y", -Math.PI, Math.PI).name("Rotation Y").step(0.001);
-cameraFolder.add(camera.rotation, "z", -Math.PI, Math.PI).name("Rotation Z").step(0.001);
-// Control Camera Field of View (FOV)
-cameraFolder
-  .add(camera, "fov", 1, 120)
-  .name("Field of View")
-  .onChange(() => {
-    camera.updateProjectionMatrix(); // Update camera after changing FOV
-  });
-cameraFolder.open(); // Open the Camera Controls by default
+// const gui = new dat.GUI();
+// const cameraFolder = gui.addFolder("Camera Controls");
+// // Control Camera Position
+// cameraFolder.add(camera.position, "x", -1, 1).name("Position X").step(0.001);
+// cameraFolder.add(camera.position, "y", -1, 2).name("Position Y").step(0.001);
+// cameraFolder.add(camera.position, "z", -1, 1).name("Position Z").step(0.001);
+// // Control Camera Rotation
+// cameraFolder.add(camera.rotation, "x", -Math.PI, Math.PI).name("Rotation X").step(0.001);
+// cameraFolder.add(camera.rotation, "y", -Math.PI, Math.PI).name("Rotation Y").step(0.001);
+// cameraFolder.add(camera.rotation, "z", -Math.PI, Math.PI).name("Rotation Z").step(0.001);
+// // Control Camera Field of View (FOV)
+// cameraFolder
+//   .add(camera, "fov", 1, 120)
+//   .name("Field of View")
+//   .onChange(() => {
+//     camera.updateProjectionMatrix(); // Update camera after changing FOV
+//   });
+// cameraFolder.open(); // Open the Camera Controls by default
