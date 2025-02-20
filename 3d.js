@@ -10,7 +10,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Set tone mapping and encoding
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1; // Increase brightness
+renderer.toneMappingExposure = 1.5; // Increase brightness
 renderer.outputEncoding = THREE.sRGBEncoding;
 
 // Append renderer's canvas to the #canvas-container div
@@ -24,38 +24,40 @@ controls.screenSpacePanning = false;
 controls.minDistance = 2; // Minimum zoom
 controls.maxDistance = 10; // Maximum zoom
 
+///////////////////////////////////////////////////////////////////////////////
 // Load HDRI Environment
 const rgbeLoader = new THREE.RGBELoader();
 rgbeLoader.load("./parkingLot2.hdr", function (texture) {
-  // Replace with HDRI file path
   texture.mapping = THREE.EquirectangularReflectionMapping;
   texture.colorSpace = THREE.SRGBColorSpace; // Gamma correction
   scene.environment = texture;
   scene.background = texture;
 });
+///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
 let model;
-
 // Load 3D Model
 const loader = new THREE.GLTFLoader();
 loader.load(
-  "./car2.glb", // Replace with your GLB/GLTF file URL
+  "./car2.glb",
   function (gltf) {
     model = gltf.scene;
     scene.add(model);
     model.position.set(0, 0, 0);
     model.scale.set(2.1, 2.1, 2.1);
-
     const tl = gsap.timeline({
-      // repeat: -1,
-      // yoyo: true,
       scrollTrigger: {
         trigger: "#canvas-container",
         markers: true,
         scrub: 2,
         pin: true,
-        start: "1% top", // Starts when the top of section_one reaches the top of the viewport
-        end: "+=4000px 95%", // Ends when the bottom of section_one reaches the top of the viewport
+        start: "1% top",
+        end: "+=4000px 95%",
+        onEnter: () => {
+          console.log("sdvv");
+          document.querySelector(".overlay").style.position = "fixed";
+        },
       },
     });
 
@@ -65,8 +67,6 @@ loader.load(
         x: 0.02,
         y: 0.803,
         z: 0.54,
-        // delay: 3,
-        // duration: 1.5,
       },
       "one"
     )
@@ -76,21 +76,17 @@ loader.load(
           x: 0.242,
           y: 3.142,
           z: -0.02,
-          // delay: 3,
-          // duration: 1,
         },
         "one"
       )
       .fromTo(".overlay", { opacity: 0 }, { opacity: 1 }, "one")
-      .to(".card1", { opacity: 1 })
+      .to(".card1", { opacity: 1 }, "one+=0.4")
       .to(
         camera.position,
         {
           x: -0.02,
           y: 0.451,
           z: 0.473,
-          // delay: 3,
-          // duration: 1,
         },
         "two"
       )
@@ -100,19 +96,15 @@ loader.load(
           x: 0,
           y: 3.2,
           z: -0.034,
-          // delay: 3,
-          // duration: 1,
         },
         "two"
       )
       .to(".card1", { opacity: 0 }, "two")
-      .to(".card2", { opacity: 1 })
+      .to(".card2", { opacity: 1 }, "two+=0.4")
       .to(
         camera.position,
         {
           z: 0.4,
-          // delay: 3,
-          // duration: 1,
         },
         "a"
       )
@@ -123,8 +115,6 @@ loader.load(
           x: 0.011,
           y: 0.297,
           z: 0.517,
-          // delay: 3,
-          // duration: 1,
         },
         "three"
       )
@@ -134,16 +124,12 @@ loader.load(
           x: 0,
           y: 3.142,
           z: 0.01,
-          // delay: 3,
-          // duration: 1,
         },
         "three"
       )
-      .to(".card3", { opacity: 1 })
+      .to(".card3", { opacity: 1 }, "three+=0.4")
       .to(camera.position, {
         z: 0.5,
-        // delay: 3,
-        // duration: 1,
       })
       .to(
         camera.position,
@@ -151,8 +137,6 @@ loader.load(
           x: -0.45,
           y: 0.7,
           z: 0.65,
-          // delay: 3,
-          // duration: 1,
         },
         "four"
       )
@@ -162,21 +146,17 @@ loader.load(
           x: 0,
           y: 3.2,
           z: 0,
-          // delay: 3,
-          // duration: 1,
         },
         "four"
       )
       .to(".card3", { opacity: 0 }, "four")
-      .to(".card4", { opacity: 1 })
+      .to(".card4", { opacity: 1 }, "four+=0.4")
       .to(
         camera.position,
         {
           x: -0.033,
           y: 1.243,
           z: -0.781,
-          // delay: 3,
-          // duration: 1,
         },
         "five"
       )
@@ -186,13 +166,11 @@ loader.load(
           x: -0.933,
           y: -0.034,
           z: 0,
-          // delay: 3,
-          // duration: 1,
         },
         "five"
       )
       .to(".card4", { opacity: 0 }, "five")
-      .to(".card5", { opacity: 1 });
+      .to(".card5", { opacity: 1 }, "five+=0.4");
   },
   function (xhr) {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -201,9 +179,10 @@ loader.load(
     console.error("Error loading model:", error);
   }
 );
+///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
 // Set Camera Position
-
 //Base Camera
 camera.position.set(5, 1.5, 2);
 camera.rotation.set(0, 1.2, 0);
@@ -251,7 +230,9 @@ window.addEventListener("resize", () => {
 
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
+///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
 // Lights
 const directionalLight = new THREE.DirectionalLight("white", 1);
 directionalLight.position.set(5, 2, 0);
@@ -265,7 +246,9 @@ const ambientLight = new THREE.AmbientLight();
 ambientLight.color = new THREE.Color("white");
 ambientLight.intensity = 0.4;
 scene.add(ambientLight);
+///////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////
 // Gui Helpers
 // const gui = new dat.GUI();
 // const cameraFolder = gui.addFolder("Camera Controls");
@@ -285,3 +268,145 @@ scene.add(ambientLight);
 //     camera.updateProjectionMatrix(); // Update camera after changing FOV
 //   });
 // cameraFolder.open(); // Open the Camera Controls by default
+///////////////////////////////////////////////////////////////////////////////
+
+const splitH2 = new SplitType(".site-info h2", {
+  types: "lines",
+});
+
+splitH2.lines.forEach((line) => {
+  const text = line.textContent;
+  const wrapper = document.createElement("div");
+  wrapper.className = "line";
+  const span = document.createElement("span");
+  span.textContent = text;
+  wrapper.appendChild(span);
+  line.parentNode.replaceChild(wrapper, line);
+});
+
+const mainTl = gsap.timeline();
+const revealerTl = gsap.timeline();
+const scaleTl = gsap.timeline();
+
+revealerTl
+  .to(".r-1", {
+    clipPath: "polygon(0% 0%,100% 0%,100% 0%,0% 0%)",
+    duration: 1.5,
+    ease: "hop",
+  })
+  .to(
+    ".r-2",
+    {
+      clipPath: "polygon(0% 100%,100% 100%,100% 100%,0% 100%)",
+      duration: 1.5,
+      ease: "hop",
+    },
+    "<"
+  );
+
+scaleTl.to(".img:first-child", {
+  scale: 1,
+  duration: 2,
+  ease: "power.inOut",
+});
+
+const images = document.querySelectorAll(".img:not(:first-child)");
+
+images.forEach((img, index) => {
+  scaleTl.to(
+    img,
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 1.25,
+      ease: "power3.out",
+    },
+    ">-0.7"
+  );
+});
+
+mainTl
+  .add(revealerTl)
+  .add(scaleTl, "-=1.25")
+  .add(() => {
+    document.querySelectorAll(".img:not(.main)").forEach((img) => img.remove());
+    const state = Flip.getState(".main");
+    const imagesContainer = document.querySelector(".images");
+    imagesContainer.classList.add("stacked-container");
+
+    document.querySelectorAll(".main").forEach((img, i) => {
+      img.classList.add("stacked");
+      img.style.order = i;
+      gsap.set(".img.stacked", {
+        clearProps: "transform,top,left",
+      });
+    });
+
+    return Flip.from(state, {
+      duration: 2,
+      ease: "hop",
+      absolute: true,
+      stagger: {
+        amount: -0.3,
+      },
+    });
+  })
+  .to(".word h1,.nav-item p,.line p,.site-info h2 .line span", {
+    y: 0,
+    duration: 3,
+    ease: "hop2",
+    stagger: 0.1,
+    delay: 1.25,
+  })
+  .to(".cover-img", {
+    clipPath: "polygon(0% 100%,100% 100%,100% 0%,0% 0%)",
+    duration: 2,
+    ease: "hop",
+    delay: -2,
+  })
+  .eventCallback("onStart", () => {
+    // Disable scrolling when the timeline starts
+    document.body.style.overflow = "hidden";
+  })
+  .eventCallback("onComplete", () => {
+    // Enable scrolling when the timeline completes
+    document.body.style.overflow = "";
+  });
+
+//Move page to top on refresh
+
+document.querySelectorAll(".section").forEach((sectionElement, index, sections) => {
+  // Check if it's the last section
+  if (index === sections.length - 1) {
+    return; // Skip the last section
+  }
+
+  const containerElement = sectionElement.querySelector(".container");
+  const nextSectionElement = sectionElement.parentNode.querySelector(
+    `section:nth-child(${index + 2})`
+  );
+
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: sectionElement,
+        start: `center (nextSectionElement.offsetTop - (window.innerHeight * 0.5))`,
+        end: `bottom 20%`,
+        scrub: 1,
+        pin: true,
+        pinSpacing: false,
+        markers: true,
+      },
+    })
+    .to(containerElement, {
+      opacity: 0,
+      scale: 0.8,
+      yPercent: 30,
+      duration: 3,
+      ease: "power1.out",
+    });
+});
+
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+};

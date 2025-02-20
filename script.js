@@ -109,36 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.style.overflow = "";
     });
 
-  // document.querySelectorAll(".section").forEach((sectionElement, index) => {
-  //   if (index === sections.length - 1) {
-  //     return; // Skip the last section
-  //   }
-  //   const containerElement = sectionElement.querySelector(".container");
-  //   const nextSectionElement = sectionElement.parentNode.querySelector(
-  //     `section:nth-child(${index + 2})`
-  //   );
-
-  //   gsap
-  //     .timeline({
-  //       scrollTrigger: {
-  //         trigger: sectionElement,
-  //         start: `center (nextSectionElement.offsetTop - (window.innerHeight * 0.5))`,
-  //         end: `bottom 20%`,
-  //         scrub: 1,
-  //         pin: true,
-  //         pinSpacing: false,
-  //         markers: true,
-  //       },
-  //     })
-  //     .to(containerElement, {
-  //       opacity: 0,
-  //       scale: 0.8,
-  //       yPercent: 30,
-  //       duration: 3,
-  //       ease: "power1.out",
-  //     });
-  // });
-
   //Move page to top on refresh
 
   document.querySelectorAll(".section").forEach((sectionElement, index, sections) => {
@@ -205,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       position: "fixed",
       top: 0,
-      // visibility: "hidden",
       scrollTrigger: {
         trigger: ".first",
         start: "top top",
@@ -234,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gsap.set(innerWrappers, { yPercent: -100 });
 
   function gotoSection(index, direction) {
-    index = wrap(index); // make sure it's valid
+    index = wrap(index);
     animating = true;
     let fromTop = direction === -1,
       dFactor = fromTop ? -1 : 1,
@@ -243,7 +212,6 @@ document.addEventListener("DOMContentLoaded", () => {
         onComplete: () => (animating = false),
       });
     if (currentIndex >= 0) {
-      // The first time this function runs, current is -1
       gsap.set(sections[currentIndex], { zIndex: 0 });
       tl.to(images2[currentIndex], { yPercent: -15 * dFactor }).set(sections[currentIndex], {
         autoAlpha: 0,
@@ -274,7 +242,4 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   gotoSection(0, 1);
-
-  // original: https://codepen.io/BrianCross/pen/PoWapLP
-  // horizontal version: https://codepen.io/GreenSock/pen/xxWdeMK
 });
